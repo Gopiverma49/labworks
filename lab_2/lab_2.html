@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 2 - Product Information Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      color: #333333;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 30px auto;
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: #7f8c8d;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #dddddd;
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #3498db;
+      color: #ffffff;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9fbfd;
+    }
+
+    tr:hover {
+      background-color: #f1f5f9;
+    }
+
+    .status-in-stock {
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .status-limited {
+      color: #e67e22;
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.85rem;
+      color: #888888;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Product Information Portal</h1>
+    <p class="subtitle">Web Programming Lab 2 - Displaying Data Using HTML Table</p>
+
+    <!-- Product Information Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Sl. No.</th>
+          <th>Product Name</th>
+          <th>Brand</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>iPhone 15</td>
+          <td>Apple</td>
+          <td>Smartphone</td>
+          <td>$799</td>
+          <td><span class="status-in-stock">In Stock</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Galaxy S24</td>
+          <td>Samsung</td>
+          <td>Smartphone</td>
+          <td>$749</td>
+          <td><span class="status-in-stock">In Stock</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>MacBook Air M2</td>
+          <td>Apple</td>
+          <td>Laptop</td>
+          <td>$999</td>
+          <td><span class="status-in-stock">In Stock</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>WH-1000XM5 Headphones</td>
+          <td>Sony</td>
+          <td>Audio</td>
+          <td>$349</td>
+          <td><span class="status-limited">Limited Stock</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>iPad Air</td>
+          <td>Apple</td>
+          <td>Tablet</td>
+          <td>$599</td>
+          <td><span class="status-in-stock">In Stock</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footer">
+      &copy; 2026 Web Programming Lab - Experiment 2
+    </div>
+  </div>
+
+</body>
+</html>

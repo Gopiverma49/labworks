@@ -1,0 +1,148 @@
+/* =========================================================
+   Simple and Clean Stylesheet for Beginner Web Programming Lab
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+  color: #333333;
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  background-color: #2c3e50;
+  color: #ffffff;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+header h1 {
+  margin-bottom: 0.3rem;
+}
+
+header p {
+  color: #bdc3c7;
+  font-size: 0.95rem;
+}
+
+/* Main Container */
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.container h2 {
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+}
+
+/* Books List Layout */
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Single Book Card */
+.book-item {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.book-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-item h3 {
+  color: #2980b9;
+  margin-bottom: 0.5rem;
+}
+
+.book-item p {
+  margin-bottom: 0.4rem;
+  color: #555555;
+}
+
+/* Details Box on the next page */
+.details-box {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.details-box h2 {
+  color: #2c3e50;
+  border-bottom: none;
+  margin-bottom: 0.5rem;
+}
+
+.details-box hr {
+  border: 0;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.details-box p {
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+
+.details-box h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+/* Buttons and Links */
+.btn {
+  display: inline-block;
+  background-color: #3498db;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background-color: #2980b9;
+}
+
+.btn-secondary {
+  background-color: #7f8c8d;
+}
+
+.btn-secondary:hover {
+  background-color: #636e72;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 3rem;
+  background-color: #ffffff;
+  border-top: 1px solid #e0e0e0;
+  color: #777777;
+  font-size: 0.9rem;
+}

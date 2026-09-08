@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <title>Country</title>
+    <style>
+        #capital {
+            color: #2b5cb7;
+            /* Font color */
+            font-weight: bold;
+            /* Bold font */
+            font-size: 22px;
+            /* Font size */
+            margin-left: 10px;
+            /* Spacing from dropdown */
+        }
+    </style>
+</head>
+
+<body>
+    <select id="country" onchange="showcapital()">
+        <option>select country</option>
+        <option>India</option>
+        <option>USA</option>
+        <option>Canada</option>
+        <option>Germany</option>
+        <option>South korea</option>
+    </select>
+    <span id="capital"></span>
+
+    <script>
+        function showcapital() {
+            let c = document.getElementById("country").value;
+            let capitals = {
+                "India": "New Delhi",
+                "USA": "Washington",
+                "Canada": "Ottawa",
+                "Germany": "Berlin",
+                "South korea": "Seoul"
+            };
+            if (capitals[c]) {
+                document.getElementById("capital").innerHTML = capitals[c];
+            } else {
+                document.getElementById("capital").innerHTML = "";
+            }
+        }
+    </script>
+</body>
+
+</html>
