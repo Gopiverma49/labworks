@@ -1,0 +1,87 @@
+/* Page styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+
+    /* Background image */
+    background-image: url("background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    color: #333;
+}
+
+/* Main container */
+.container {
+    width: 70%;
+    margin: 50px auto;
+    padding: 30px;
+
+    background-color: rgba(255, 255, 255, 0.92);
+
+    border: 3px solid #3498db;
+    border-radius: 15px;
+
+    text-align: center;
+}
+
+/* Main heading */
+h1 {
+    color: #1a5276;
+    font-size: 40px;
+
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* Introduction paragraph */
+.intro {
+    color: #555;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Content boxes */
+.box {
+    margin: 25px 0;
+    padding: 20px;
+
+    border: 2px solid #2ecc71;
+    border-radius: 10px;
+
+    background-color: #f4fff7;
+
+    text-align: left;
+}
+
+/* Box headings */
+.box h2 {
+    color: #27ae60;
+}
+
+/* List */
+li {
+    margin: 10px;
+    color: #444;
+}
+
+/* Button */
+button {
+    padding: 12px 25px;
+
+    background-color: #3498db;
+    color: white;
+
+    border: 2px solid #1a5276;
+    border-radius: 8px;
+
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #1a5276;
+}
