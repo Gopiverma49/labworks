@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved User Information</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="page-container">
+        <main class="content-card">
+            
+            <header class="card-header">
+                <h1 class="card-title">Saved User Information</h1>
+                <p class="card-description">The following user details were validated and saved.</p>
+            </header>
+
+            <div id="dataContainer">
+                <table class="display-table">
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td id="displayName">-</td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td id="displayGender">-</td>
+                        </tr>
+                        <tr>
+                            <th>Mobile Number</th>
+                            <td id="displayMobile">-</td>
+                        </tr>
+                        <tr>
+                            <th>Email ID</th>
+                            <td id="displayEmail">-</td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td id="displayCity">-</td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td id="displayState">-</td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td id="displayCountry">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="form-actions">
+                    <a href="index.html" class="btn btn-secondary">
+                        Enter New Information
+                    </a>
+                    <button type="button" class="btn btn-primary" onclick="window.print()">
+                        Print Information
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty state fallback if accessed directly -->
+            <div id="emptyContainer" style="display: none; text-align: center; padding: 1.5rem 0;">
+                <p class="card-description" style="margin-bottom: 1.5rem;">
+                    No user information has been saved yet.
+                </p>
+                <a href="index.html" class="btn btn-primary" style="display: inline-block; width: auto; padding: 0.75rem 1.75rem;">
+                    Go to Form
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function loadSavedData() {
+            let user = null;
+
+            // 1. Check URL query parameters
+            const params = new URLSearchParams(window.location.search);
+            if (params.has("name") && params.get("name")) {
+                user = {
+                    name: params.get("name"),
+                    gender: params.get("gender"),
+                    mobile: params.get("mobile"),
+                    email: params.get("email"),
+                    city: params.get("city"),
+                    state: params.get("state"),
+                    country: params.get("country")
+                };
+            }
+
+            // 2. Check sessionStorage
+            if (!user) {
+                const stored = sessionStorage.getItem("savedUserProfile");
+                if (stored) {
+                    try {
+                        user = JSON.parse(stored);
+                    } catch (e) {
+                        console.error("Failed to parse stored user profile", e);
+                    }
+                }
+            }
+
+            if (user && user.name) {
+                document.getElementById("displayName").textContent = user.name;
+                document.getElementById("displayGender").textContent = user.gender;
+                document.getElementById("displayMobile").textContent = user.mobile;
+                document.getElementById("displayEmail").textContent = user.email;
+                document.getElementById("displayCity").textContent = user.city;
+                document.getElementById("displayState").textContent = user.state;
+                document.getElementById("displayCountry").textContent = user.country;
+
+                document.getElementById("dataContainer").style.display = "block";
+                document.getElementById("emptyContainer").style.display = "none";
+            } else {
+                document.getElementById("dataContainer").style.display = "none";
+                document.getElementById("emptyContainer").style.display = "block";
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", loadSavedData);
+    </script>
+</body>
+</html>

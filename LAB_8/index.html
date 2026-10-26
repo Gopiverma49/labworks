@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="page-container">
+        <main class="content-card">
+            
+            <header class="card-header">
+                <h1 class="card-title">User Information</h1>
+                <p class="card-description">Please enter your details below. All fields are required.</p>
+            </header>
+
+            <!-- Error banner -->
+            <div id="formErrorBanner" class="notification-banner" role="alert"></div>
+
+            <form id="infoForm" onsubmit="handleSave(event)" novalidate>
+                <div class="form-grid">
+                    
+                    <!-- Name -->
+                    <div class="form-group full-width">
+                        <label class="form-label" for="name">
+                            <span>Name</span>
+                            <span class="required-mark">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            class="form-input" 
+                            placeholder="Enter your full name" 
+                            autocomplete="name"
+                        >
+                        <div id="error-name" class="field-error-msg"></div>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="form-group full-width">
+                        <label class="form-label">
+                            <span>Gender</span>
+                            <span class="required-mark">*</span>
+                        </label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="Male"> Male
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="Female"> Female
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="Other"> Other
+                            </label>
+                        </div>
+                        <div id="error-gender" class="field-error-msg"></div>
+                    </div>
+
+                    <!-- Mobile Number -->
+                    <div class="form-group">
+                        <label class="form-label" for="mobile">
+                            <span>Mobile Number</span>
+                            <span class="required-mark">*</span>
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="mobile" 
+                            name="mobile" 
+                            class="form-input" 
+                            placeholder="10-digit mobile number" 
+                            maxlength="10"
+                            autocomplete="tel"
+                        >
+                        <div id="error-mobile" class="field-error-msg"></div>
+                    </div>
+
+                    <!-- Email ID -->
+                    <div class="form-group">
+                        <label class="form-label" for="email">
+                            <span>Email ID</span>
+                            <span class="required-mark">*</span>
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="Enter your email address" 
+                            autocomplete="email"
+                        >
+                        <div id="error-email" class="field-error-msg"></div>
+                    </div>
+
+                    <!-- City -->
+                    <div class="form-group">
+                        <label class="form-label" for="city">
+                            <span>City</span>
+                            <span class="required-mark">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="city" 
+                            name="city" 
+                            class="form-input" 
+                            placeholder="Enter your city"
+                        >
+                        <div id="error-city" class="field-error-msg"></div>
+                    </div>
+
+                    <!-- State (Free text input, not hardcoded) -->
+                    <div class="form-group">
+                        <label class="form-label" for="state">
+                            <span>State</span>
+                            <span class="required-mark">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="state" 
+                            name="state" 
+                            class="form-input" 
+                            placeholder="Enter your state"
+                        >
+                        <div id="error-state" class="field-error-msg"></div>
+                    </div>
+
+                    <!-- Country (Free text input, not hardcoded) -->
+                    <div class="form-group full-width">
+                        <label class="form-label" for="country">
+                            <span>Country</span>
+                            <span class="required-mark">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="country" 
+                            name="country" 
+                            class="form-input" 
+                            placeholder="Enter your country"
+                        >
+                        <div id="error-country" class="field-error-msg"></div>
+                    </div>
+
+                </div>
+
+                <!-- Two options: Clear All Fields and Save -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="handleClear()">
+                        Clear All Fields
+                    </button>
+                    <button type="submit" id="saveBtn" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+            </form>
+
+        </main>
+    </div>
+
+    <script>
+        function clearErrors() {
+            const errorBanner = document.getElementById("formErrorBanner");
+            errorBanner.textContent = "";
+            errorBanner.classList.remove("visible");
+
+            const errorFields = document.querySelectorAll(".field-error-msg");
+            errorFields.forEach(el => {
+                el.textContent = "";
+                el.classList.remove("visible");
+            });
+
+            const inputs = document.querySelectorAll(".form-input");
+            inputs.forEach(input => input.classList.remove("is-invalid"));
+        }
+
+        function displayFieldError(fieldName, message) {
+            const errorElement = document.getElementById(`error-${fieldName}`);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.add("visible");
+            }
+
+            const inputElement = document.getElementById(fieldName);
+            if (inputElement) {
+                inputElement.classList.add("is-invalid");
+            }
+        }
+
+        function handleClear() {
+            document.getElementById("infoForm").reset();
+            clearErrors();
+        }
+
+        async function handleSave(event) {
+            event.preventDefault();
+            clearErrors();
+
+            const name = document.getElementById("name").value.trim();
+            const genderEl = document.querySelector('input[name="gender"]:checked');
+            const mobile = document.getElementById("mobile").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const city = document.getElementById("city").value.trim();
+            const state = document.getElementById("state").value.trim();
+            const country = document.getElementById("country").value.trim();
+
+            const gender = genderEl ? genderEl.value : "";
+
+            const payload = {
+                name: name,
+                gender: gender,
+                mobile: mobile,
+                email: email,
+                city: city,
+                state: state,
+                country: country
+            };
+
+            const saveBtn = document.getElementById("saveBtn");
+            saveBtn.disabled = true;
+            saveBtn.textContent = "Checking...";
+
+            // Send to Pydantic validation endpoint
+            try {
+                // Determine API endpoint (relative or direct local server)
+                const apiHost = window.location.origin.startsWith("http") ? "" : "http://127.0.0.1:8000";
+                const response = await fetch(`${apiHost}/api/save`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Validated successfully by Pydantic
+                    sessionStorage.setItem("savedUserProfile", JSON.stringify(result.data));
+                    
+                    // Also forward via URL parameters for reliable file:// protocol access
+                    const params = new URLSearchParams(result.data);
+                    window.location.href = `display.html?${params.toString()}`;
+                } else {
+                    // Pydantic validation errors
+                    if (result.errors) {
+                        for (const [field, msg] of Object.entries(result.errors)) {
+                            displayFieldError(field, msg);
+                        }
+                    } else {
+                        const banner = document.getElementById("formErrorBanner");
+                        banner.textContent = result.message || "Validation failed. Please check the entered fields.";
+                        banner.classList.add("visible");
+                    }
+                }
+            } catch (err) {
+                // If Python server is not currently running, perform identical Pydantic rule validation on client
+                console.warn("Backend server not reached, validating locally with Pydantic rules:", err);
+                validateWithPydanticRules(payload);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = "Save";
+            }
+        }
+
+        // Mirrors the exact Pydantic model rules if the server is starting or offline
+        function validateWithPydanticRules(data) {
+            let hasErrors = false;
+
+            if (!data.name || data.name.length < 2) {
+                displayFieldError("name", "Name must be at least 2 characters long.");
+                hasErrors = true;
+            } else if (!/^[A-Za-z\s.'-]+$/.test(data.name)) {
+                displayFieldError("name", "Name can only contain alphabetic letters and spaces.");
+                hasErrors = true;
+            }
+
+            if (!data.gender) {
+                displayFieldError("gender", "Please select a gender option.");
+                hasErrors = true;
+            }
+
+            const cleanMobile = data.mobile.replace(/\D/g, "");
+            if (cleanMobile.length !== 10) {
+                displayFieldError("mobile", "Mobile number must be exactly 10 digits.");
+                hasErrors = true;
+            }
+
+            const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+            if (!emailPattern.test(data.email)) {
+                displayFieldError("email", "Please enter a valid email address.");
+                hasErrors = true;
+            }
+
+            if (!data.city || data.city.length < 2 || !/^[A-Za-z\s.'-]+$/.test(data.city)) {
+                displayFieldError("city", "Please enter a valid city name.");
+                hasErrors = true;
+            }
+
+            if (!data.state || data.state.length < 2 || !/^[A-Za-z\s.'-]+$/.test(data.state)) {
+                displayFieldError("state", "Please enter a valid state name.");
+                hasErrors = true;
+            }
+
+            if (!data.country || data.country.length < 2 || !/^[A-Za-z\s.'-]+$/.test(data.country)) {
+                displayFieldError("country", "Please enter a valid country name.");
+                hasErrors = true;
+            }
+
+            if (!hasErrors) {
+                sessionStorage.setItem("savedUserProfile", JSON.stringify(data));
+                const params = new URLSearchParams(data);
+                window.location.href = `display.html?${params.toString()}`;
+            }
+        }
+    </script>
+</body>
+</html>
