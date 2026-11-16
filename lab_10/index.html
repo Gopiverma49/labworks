@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 10 - Web Application</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Container for dynamic top-right corner start time badge (used in GitHub Pages mode) -->
+    <div id="ghTopRightBadge" class="top-right-corner" style="display: none;">
+        <span class="indicator"></span>
+        <span>Start Time: <strong id="ghStartTimeVal">--:--:-- --</strong></span>
+    </div>
+
+    <!-- Main Application Card -->
+    <div class="app-card" id="appCard">
+        
+        <!-- View 1: Entry Form -->
+        <div id="viewForm">
+            <header class="app-header">
+                <span class="badge-tag">Experiment 10</span>
+                <h1>Web Application</h1>
+                <p>Please enter your name and age to enter the site.</p>
+            </header>
+
+            <form id="mainForm" action="hello.php" method="POST">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        class="form-input" 
+                        placeholder="e.g. John Doe" 
+                        required 
+                        autocomplete="name"
+                        autofocus
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Your Age</label>
+                    <input 
+                        type="number" 
+                        id="age" 
+                        name="age" 
+                        class="form-input" 
+                        placeholder="e.g. 19" 
+                        min="1" 
+                        max="120" 
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Submit &rarr;
+                </button>
+            </form>
+
+            <!-- Environment banner & PHP code viewer for static GitHub Pages hosting -->
+            <div id="githubPagesNotice" class="env-notice" style="display: none;">
+                <span>🌐 GitHub Pages Demo Mode</span>
+                <button type="button" class="btn-code-toggle" onclick="openCodeModal()">View PHP Code</button>
+            </div>
+        </div>
+
+        <!-- View 2: Access Denied (Age < 18) for Static / GitHub Pages Mode -->
+        <div id="viewDenied" style="display: none;">
+            <header class="app-header">
+                <span class="badge-tag" style="background: #fef2f2; color: #ef4444;">Access Denied</span>
+                <h1>Authorization Status</h1>
+            </header>
+
+            <div class="alert-box alert-danger">
+                <div class="alert-icon">&#9940;</div>
+                <h2 id="deniedMsg">Hello, you are not authorized to visit the site</h2>
+                <p style="margin-top: 8px; font-size: 0.95rem; opacity: 0.9;">
+                    Age entered: <strong id="deniedAge">--</strong>. You must be at least 18 years old to access this site.
+                </p>
+            </div>
+
+            <div class="info-panel">
+                <span class="info-title">Current PHP System Information</span>
+                <div class="info-grid">
+                    <div class="info-tile">
+                        <span class="label">Date</span>
+                        <span class="value" id="deniedDate">--</span>
+                    </div>
+                    <div class="info-tile">
+                        <span class="label">Time</span>
+                        <span class="value" id="deniedTime">--</span>
+                    </div>
+                    <div class="info-tile">
+                        <span class="label">Day</span>
+                        <span class="value" id="deniedDay">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-secondary" onclick="showFormView()">
+                &larr; Back to Form
+            </button>
+        </div>
+
+        <!-- View 3: Authorized & Hello Page (Age >= 18) for Static / GitHub Pages Mode -->
+        <div id="viewAuthorized" style="display: none;">
+            <header class="app-header">
+                <span class="badge-tag">Session Active</span>
+                <h1 id="authHelloTitle">Hello!</h1>
+            </header>
+
+            <div class="alert-box alert-success">
+                <div class="alert-icon">&#10004;</div>
+                <h2>Welcome to this site</h2>
+                <p style="margin-top: 8px; font-size: 0.95rem; opacity: 0.9;">
+                    Your age has been verified and your active session has begun.
+                </p>
+            </div>
+
+            <div class="info-panel">
+                <span class="info-title">Current PHP System Information</span>
+                <div class="info-grid">
+                    <div class="info-tile">
+                        <span class="label">Date</span>
+                        <span class="value" id="authDate">--</span>
+                    </div>
+                    <div class="info-tile">
+                        <span class="label">Time</span>
+                        <span class="value" id="authTime">--</span>
+                    </div>
+                    <div class="info-tile">
+                        <span class="label">Day</span>
+                        <span class="value" id="authDay">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-danger" onclick="handleLogout()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
+                Logout
+            </button>
+        </div>
+
+        <!-- View 4: Logout & Thank You Page for Static / GitHub Pages Mode -->
+        <div id="viewLogout" style="display: none;">
+            <header class="app-header">
+                <span class="badge-tag" style="background: #ecfdf5; color: #059669;">Session Ended</span>
+                <h1 id="logoutThankYouTitle">Thank You!</h1>
+                <p>You have been successfully logged out.</p>
+            </header>
+
+            <div class="duration-box">
+                <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Duration of Usage</span>
+                <div class="duration-number" id="logoutDuration">0 seconds</div>
+                <span style="font-size: 0.85rem; opacity: 0.85;" id="logoutDurationTotal">(Total: 0 seconds)</span>
+            </div>
+
+            <div class="info-panel">
+                <span class="info-title">Current PHP System Information</span>
+                <div class="info-grid">
+                    <div class="info-tile">
+                        <span class="label">Date</span>
+                        <span class="value" id="logoutDate">--</span>
+                    </div>
+                    <div class="info-tile">
+                        <span class="label">Time</span>
+                        <span class="value" id="logoutTime">--</span>
+                    </div>
+                    <div class="info-tile">
+                        <span class="label">Day</span>
+                        <span class="value" id="logoutDay">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="showFormView()">
+                Start New Session
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Modal to inspect authentic PHP source code (for GitHub Pages visitors/evaluators) -->
+    <div class="code-modal" id="codeModal" onclick="if(event.target===this) closeCodeModal()">
+        <div class="code-modal-content">
+            <div class="code-modal-header">
+                <h3>Lab 10 &bull; PHP Backend Source Code</h3>
+                <button type="button" class="btn-close-modal" onclick="closeCodeModal()">&times;</button>
+            </div>
+            <div class="code-tabs">
+                <button type="button" class="code-tab-btn active" id="tabHelloBtn" onclick="switchCodeTab('hello')">hello.php</button>
+                <button type="button" class="code-tab-btn" id="tabLogoutBtn" onclick="switchCodeTab('logout')">logout.php</button>
+            </div>
+            <pre class="code-modal-body" id="codeModalBody">Loading PHP code...</pre>
+        </div>
+    </div>
+
+    <script>
+        // Check if hosted on GitHub Pages or static host (where POST to PHP causes HTTP 405)
+        const isStaticHost = window.location.hostname.includes("github.io") || 
+                             window.location.protocol === "file:" ||
+                             window.location.port === "5500"; // common Live Server port
+
+        if (isStaticHost) {
+            const notice = document.getElementById("githubPagesNotice");
+            if (notice) notice.style.display = "flex";
+        }
+
+        // System Date, Time, Day formatter
+        function getSystemDateTime() {
+            const now = new Date();
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const yyyy = now.getFullYear();
+            const dateStr = `${dd}-${mm}-${yyyy}`;
+
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 is 12
+            const timeStr = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+            const dayStr = days[now.getDay()];
+
+            return { dateStr, timeStr, dayStr };
+        }
+
+        // View management
+        function hideAllViews() {
+            document.getElementById("viewForm").style.display = "none";
+            document.getElementById("viewDenied").style.display = "none";
+            document.getElementById("viewAuthorized").style.display = "none";
+            document.getElementById("viewLogout").style.display = "none";
+        }
+
+        function showFormView() {
+            hideAllViews();
+            document.getElementById("ghTopRightBadge").style.display = "none";
+            document.getElementById("viewForm").style.display = "block";
+            document.getElementById("mainForm").reset();
+        }
+
+        // Handle form submission
+        document.getElementById("mainForm").addEventListener("submit", function(e) {
+            // If running on a true PHP server, allow native POST to hello.php!
+            if (!isStaticHost) {
+                return; // Let standard form POST to hello.php proceed
+            }
+
+            // On GitHub Pages: Prevent 405 Not Allowed error by executing client-side
+            e.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const age = parseInt(document.getElementById("age").value, 10);
+            const { dateStr, timeStr, dayStr } = getSystemDateTime();
+
+            if (age < 18) {
+                // Age < 18: Render "Hello <name>, you are not authorized to visit the site"
+                hideAllViews();
+                document.getElementById("ghTopRightBadge").style.display = "none";
+                document.getElementById("deniedMsg").textContent = `Hello ${name}, you are not authorized to visit the site`;
+                document.getElementById("deniedAge").textContent = age;
+                document.getElementById("deniedDate").textContent = dateStr;
+                document.getElementById("deniedTime").textContent = timeStr;
+                document.getElementById("deniedDay").textContent = dayStr;
+                document.getElementById("viewDenied").style.display = "block";
+            } else {
+                // Age >= 18: Render Welcome + Active Session
+                sessionStorage.setItem("lab10_user_name", name);
+                sessionStorage.setItem("lab10_start_time", Date.now().toString());
+                sessionStorage.setItem("lab10_start_time_str", timeStr);
+
+                hideAllViews();
+                
+                // Show start time at top right corner of the page
+                const topBadge = document.getElementById("ghTopRightBadge");
+                document.getElementById("ghStartTimeVal").textContent = timeStr;
+                topBadge.style.display = "flex";
+
+                document.getElementById("authHelloTitle").textContent = `Hello, ${name}!`;
+                document.getElementById("authDate").textContent = dateStr;
+                document.getElementById("authTime").textContent = timeStr;
+                document.getElementById("authDay").textContent = dayStr;
+                document.getElementById("viewAuthorized").style.display = "block";
+            }
+        });
+
+        // Handle Logout in GitHub Pages mode
+        function handleLogout() {
+            const name = sessionStorage.getItem("lab10_user_name") || "User";
+            const startTimestamp = parseInt(sessionStorage.getItem("lab10_start_time") || Date.now().toString(), 10);
+            const endTimestamp = Date.now();
+            const durationSec = Math.max(0, Math.floor((endTimestamp - startTimestamp) / 1000));
+
+            let durationText = "";
+            if (durationSec < 60) {
+                durationText = `${durationSec} second${durationSec !== 1 ? 's' : ''}`;
+            } else {
+                const mins = Math.floor(durationSec / 60);
+                const secs = durationSec % 60;
+                durationText = `${mins} min ${secs > 0 ? secs + ' sec' : ''}`;
+            }
+
+            const { dateStr, timeStr, dayStr } = getSystemDateTime();
+
+            hideAllViews();
+            document.getElementById("ghTopRightBadge").style.display = "none";
+
+            document.getElementById("logoutThankYouTitle").textContent = `Thank You, ${name}!`;
+            document.getElementById("logoutDuration").textContent = durationText;
+            document.getElementById("logoutDurationTotal").textContent = `(Total: ${durationSec} seconds)`;
+            document.getElementById("logoutDate").textContent = dateStr;
+            document.getElementById("logoutTime").textContent = timeStr;
+            document.getElementById("logoutDay").textContent = dayStr;
+
+            sessionStorage.removeItem("lab10_user_name");
+            sessionStorage.removeItem("lab10_start_time");
+            sessionStorage.removeItem("lab10_start_time_str");
+
+            document.getElementById("viewLogout").style.display = "block";
+        }
+
+        // PHP Source Code Modal Handling
+        let cachedHelloPHP = "";
+        let cachedLogoutPHP = "";
+
+        async function openCodeModal() {
+            document.getElementById("codeModal").classList.add("active");
+            if (!cachedHelloPHP) {
+                try {
+                    const resHello = await fetch("hello.php");
+                    cachedHelloPHP = await resHello.text();
+                    const resLogout = await fetch("logout.php");
+                    cachedLogoutPHP = await resLogout.text();
+                } catch (e) {
+                    cachedHelloPHP = "// hello.php could not be fetched directly.";
+                    cachedLogoutPHP = "// logout.php could not be fetched directly.";
+                }
+            }
+            switchCodeTab('hello');
+        }
+
+        function closeCodeModal() {
+            document.getElementById("codeModal").classList.remove("active");
+        }
+
+        function switchCodeTab(tab) {
+            const btnHello = document.getElementById("tabHelloBtn");
+            const btnLogout = document.getElementById("tabLogoutBtn");
+            const body = document.getElementById("codeModalBody");
+
+            if (tab === 'hello') {
+                btnHello.classList.add("active");
+                btnLogout.classList.remove("active");
+                body.textContent = cachedHelloPHP || "Loading hello.php...";
+            } else {
+                btnLogout.classList.add("active");
+                btnHello.classList.remove("active");
+                body.textContent = cachedLogoutPHP || "Loading logout.php...";
+            }
+        }
+    </script>
+
+</body>
+</html>
