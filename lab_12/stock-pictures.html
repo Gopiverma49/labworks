@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA // Stock Pictures of Items - Studio Photo Gallery</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
+</head>
+<body>
+
+  <div id="scroll-progress"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="index.html" class="brand-logo">
+        <span class="dot"></span>
+        <span>AURA<span class="text-gradient">.IO</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="items.html" class="nav-link">Item Catalog</a></li>
+          <li><a href="price.html" class="nav-link">Price Matrix</a></li>
+          <li><a href="stock-pictures.html" class="nav-link active">Stock Pictures</a></li>
+          <li><a href="purchase.html" class="nav-link">Purchase</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-glass btn-sm" data-trigger="view-xml">&lt;/&gt; XML Data</button>
+        <button class="btn btn-cart-nav" data-trigger="cart">
+          <span>Bag</span>
+          <span class="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Title & Interactive Studio Gallery -->
+  <section class="container" style="padding-top: 4rem; padding-bottom: 2rem;">
+    <div class="section-header text-left reveal">
+      <span class="section-tag">Visual Verification Studio</span>
+      <h1 class="section-title">Stock Pictures of Item</h1>
+      <p class="section-subtitle">Multi-angle stock photography and studio macros parsed directly from XML <code>&lt;stockPictures&gt;</code> nodes.</p>
+    </div>
+
+    <!-- Product Picker Ribbon -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 2.5rem;" class="reveal">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <label style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Select Item to Inspect:</label>
+          <select id="gallery-item-select" class="sort-select" style="min-width: 280px;">
+            <!-- Populated from XML -->
+          </select>
+        </div>
+
+        <div id="gallery-stock-indicator" style="display: flex; align-items: center; gap: 0.6rem;">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Studio Photography Showcase -->
+    <div class="stock-gallery-wrap reveal">
+      <!-- Left: Interactive Stage Picture & Thumbnail Strip -->
+      <div>
+        <div class="main-stage-picture" id="main-stage">
+          <img id="stage-img" src="" alt="Stock Picture" />
+          <div class="angle-label-overlay" id="stage-angle-badge">Front Profile</div>
+          <button id="fullscreen-zoom-btn" style="position: absolute; bottom: 1rem; right: 1rem; background: rgba(0,0,0,0.7); border: 1px solid var(--border-subtle); color: #fff; padding: 0.4rem 0.8rem; border-radius: var(--radius-full); font-size: 0.75rem; cursor: pointer; backdrop-filter: blur(8px);">
+            🔍 Click to Expand
+          </button>
+        </div>
+
+        <!-- Thumbnail Carousel Strip -->
+        <div class="thumbnail-strip" id="thumbnail-strip">
+          <!-- Populated from XML stockPictures -->
+        </div>
+      </div>
+
+      <!-- Right: Item Intelligence & Direct Purchase Actions -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2.5rem; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+          <span id="gallery-badge" class="badge badge-trending">BEST SELLER</span>
+          <span id="gallery-category" style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-dim); font-weight: 700;">AUDIO</span>
+        </div>
+
+        <h2 id="gallery-title" style="font-size: 2rem; margin-bottom: 0.5rem;">NovaPro Spatial Headphones</h2>
+        <p id="gallery-tagline" style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">Lossless Cinematic Audio with Neural Isolation</p>
+
+        <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle);">
+          <span id="gallery-price" class="card-price" style="font-size: 2.4rem; color: var(--accent-volt);">$299.00</span>
+          <span id="gallery-orig-price" class="card-orig-price" style="font-size: 1.2rem;">$389.00</span>
+          <span id="gallery-discount" class="card-discount-tag" style="font-size: 1rem;">-23% OFF</span>
+        </div>
+
+        <p id="gallery-desc" style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.75rem;">
+          High-fidelity drivers forged with magnesium-alloy acoustic chambers.
+        </p>
+
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-main); margin-bottom: 0.75rem;">Verified Specifications:</h4>
+        <table class="specs-table" id="gallery-specs-table" style="margin-bottom: 2rem;">
+          <!-- Injected dynamically -->
+        </table>
+
+        <div style="margin-top: auto; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1rem;">
+          <button id="gallery-buy-btn" class="btn btn-primary">Purchase Item Now &rarr;</button>
+          <button id="gallery-cart-btn" class="btn btn-volt">+ Add To Bag</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multi-Item Stock Photo Grid Gallery -->
+    <div class="reveal" style="margin-top: 4rem;">
+      <div class="section-header text-left">
+        <span class="section-tag">Visual Grid</span>
+        <h2 class="section-title">Stock Photography Across Entire Catalog</h2>
+        <p class="section-subtitle">Click any stock photography preview below to inspect that item in the studio.</p>
+      </div>
+
+      <div class="product-grid" id="all-stock-photos-grid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Fullscreen Lightbox Modal -->
+  <div id="lightbox-overlay" class="modal-overlay">
+    <div style="max-width: 90vw; max-height: 90vh; position: relative;">
+      <button class="modal-close-btn" id="close-lightbox-btn" style="top: -20px; right: -20px;">&times;</button>
+      <img id="lightbox-img" src="" alt="Fullscreen Stock View" style="max-width: 100%; max-height: 85vh; border-radius: var(--radius-md); box-shadow: 0 0 50px rgba(0,0,0,0.9); object-fit: contain;" />
+      <div id="lightbox-caption" style="text-align: center; color: var(--text-main); margin-top: 1rem; font-weight: 700;"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 AURA Online Atelier &bull; Stock Pictures of Item Module</div>
+      <div>Dynamic XML Picture Node Parser &amp; Studio Lightbox</div>
+    </div>
+  </footer>
+
+  <script src="js/xml-parser.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let activeItem = null;
+    let activePhotoIndex = 0;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.XMLStore.init();
+
+      // Check query parameter ?id=ITM-101
+      const params = new URLSearchParams(window.location.search);
+      const queryId = params.get('id') || 'ITM-101';
+
+      populateItemDropdown(queryId);
+      loadItemGallery(queryId);
+      renderAllStockGrid();
+
+      // Lightbox listeners
+      const lightbox = document.getElementById('lightbox-overlay');
+      const closeLightbox = document.getElementById('close-lightbox-btn');
+      const expandBtn = document.getElementById('fullscreen-zoom-btn');
+      const stageImg = document.getElementById('stage-img');
+
+      const openLightbox = () => {
+        if (!activeItem || !activeItem.stockPictures[activePhotoIndex]) return;
+        document.getElementById('lightbox-img').src = activeItem.stockPictures[activePhotoIndex].url;
+        document.getElementById('lightbox-caption').textContent = `${activeItem.title} - ${activeItem.stockPictures[activePhotoIndex].angle}`;
+        lightbox.classList.add('active');
+      };
+
+      expandBtn.addEventListener('click', openLightbox);
+      stageImg.addEventListener('click', openLightbox);
+
+      closeLightbox.addEventListener('click', () => lightbox.classList.remove('active'));
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) lightbox.classList.remove('active');
+      });
+
+      // Actions
+      document.getElementById('gallery-buy-btn').addEventListener('click', () => {
+        if (activeItem) window.App.buyNow(activeItem.id);
+      });
+      document.getElementById('gallery-cart-btn').addEventListener('click', () => {
+        if (activeItem) window.App.addToCart(activeItem.id);
+      });
+    });
+
+    function populateItemDropdown(selectedId) {
+      const select = document.getElementById('gallery-item-select');
+      const items = window.XMLStore.getAllItems();
+      select.innerHTML = items.map(item => `
+        <option value="${item.id}" ${item.id === selectedId ? 'selected' : ''}>${item.title} (${item.category})</option>
+      `).join('');
+
+      select.addEventListener('change', (e) => {
+        loadItemGallery(e.target.value);
+      });
+    }
+
+    function loadItemGallery(itemId) {
+      activeItem = window.XMLStore.getItemById(itemId);
+      if (!activeItem) return;
+      activePhotoIndex = 0;
+
+      // Update right intelligence card
+      document.getElementById('gallery-title').textContent = activeItem.title;
+      document.getElementById('gallery-tagline').textContent = activeItem.tagline;
+      document.getElementById('gallery-category').textContent = activeItem.category;
+      document.getElementById('gallery-price').textContent = window.XMLStore.formatPrice(activeItem.price);
+      document.getElementById('gallery-orig-price').textContent = window.XMLStore.formatPrice(activeItem.originalPrice);
+      document.getElementById('gallery-discount').textContent = `-${activeItem.discountPercent}% OFF`;
+      document.getElementById('gallery-desc').textContent = activeItem.description;
+
+      const badgeEl = document.getElementById('gallery-badge');
+      badgeEl.className = `badge badge-${activeItem.badge.type}`;
+      badgeEl.textContent = activeItem.badge.text;
+
+      // Update stock indicator
+      const stockInd = document.getElementById('gallery-stock-indicator');
+      stockInd.innerHTML = `
+        <span class="pulse-dot"></span>
+        <span style="font-size: 0.9rem; font-weight: 700; color: var(--accent-volt);">${activeItem.stock} In Stock</span>
+        <span style="color: var(--text-dim); font-size: 0.8rem;">(Stock status: ${activeItem.stockStatus})</span>
+      `;
+
+      // Update Specs table
+      const specsTable = document.getElementById('gallery-specs-table');
+      specsTable.innerHTML = activeItem.specifications.map(s => `
+        <tr>
+          <td class="spec-key">${s.label}</td>
+          <td class="spec-val">${s.value}</td>
+        </tr>
+      `).join('');
+
+      // Update Stage Picture & Thumbnails
+      updateStagePicture();
+      renderThumbnails();
+    }
+
+    function updateStagePicture() {
+      if (!activeItem || !activeItem.stockPictures.length) return;
+      const pic = activeItem.stockPictures[activePhotoIndex];
+      const img = document.getElementById('stage-img');
+      const badge = document.getElementById('stage-angle-badge');
+
+      img.src = pic.url;
+      badge.textContent = pic.angle;
+    }
+
+    function renderThumbnails() {
+      const strip = document.getElementById('thumbnail-strip');
+      strip.innerHTML = activeItem.stockPictures.map((pic, idx) => `
+        <div class="thumb-item ${idx === activePhotoIndex ? 'active' : ''}" onclick="selectPhoto(${idx})">
+          <img src="${pic.url}" alt="${pic.angle}" />
+        </div>
+      `).join('');
+    }
+
+    window.selectPhoto = function(index) {
+      activePhotoIndex = index;
+      updateStagePicture();
+      renderThumbnails();
+    };
+
+    function renderAllStockGrid() {
+      const grid = document.getElementById('all-stock-photos-grid');
+      const items = window.XMLStore.getAllItems();
+
+      grid.innerHTML = items.map(item => `
+        <div class="product-card tilt-card reveal" style="cursor: pointer;" onclick="switchActiveItem('${item.id}')">
+          <div class="card-media">
+            <img src="${item.coverImage}" alt="${item.title}" />
+            <div class="card-badges">
+              <span class="badge badge-trending">${item.stockPictures.length} Angles</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h4 style="font-size: 1.15rem; margin-bottom: 0.3rem;">${item.title}</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">${item.tagline}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+              <span style="font-weight: 800; color: var(--accent-volt);">${window.XMLStore.formatPrice(item.price)}</span>
+              <span style="font-size: 0.75rem; color: var(--accent-primary); font-weight: 700;">Inspect Angles &rarr;</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.reinitCardTilt) window.reinitCardTilt();
+    }
+
+    window.switchActiveItem = function(id) {
+      document.getElementById('gallery-item-select').value = id;
+      loadItemGallery(id);
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    };
+  </script>
+</body>
+</html>

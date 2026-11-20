@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA // Next-Gen Dynamic Online Atelier</title>
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- Motion Scroll Progress Bar -->
+  <div id="scroll-progress"></div>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="index.html" class="brand-logo">
+        <span class="dot"></span>
+        <span>AURA<span class="text-gradient">.IO</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="items.html" class="nav-link">Item Catalog</a></li>
+          <li><a href="price.html" class="nav-link">Price Matrix</a></li>
+          <li><a href="stock-pictures.html" class="nav-link">Stock Pictures</a></li>
+          <li><a href="purchase.html" class="nav-link">Purchase</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-glass btn-sm" data-trigger="view-xml" title="Inspect dynamic XML DOM">
+          <span>&lt;/&gt; XML Data</span>
+        </button>
+        <button class="btn btn-cart-nav" data-trigger="cart">
+          <span>Bag</span>
+          <span class="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Kinetic Horizontal Scrolling Marquee -->
+  <div class="marquee-ribbon">
+    <div class="marquee-track">
+      <div class="marquee-item"><span>Dynamic XML Powered Catalog</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Live Real-time Stock Tracking</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Kinetic Motion Scroll Physics</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Spatial Acoustic Gear</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Use Code <span style="color:var(--accent-volt)">SAVE20</span> for 20% Off</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Zero Bland Agentic Colors</span><span class="sep">&bull;</span></div>
+      <!-- Duplicate for seamless looping -->
+      <div class="marquee-item"><span>Dynamic XML Powered Catalog</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Live Real-time Stock Tracking</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Kinetic Motion Scroll Physics</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Spatial Acoustic Gear</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Use Code <span style="color:var(--accent-volt)">SAVE20</span> for 20% Off</span><span class="sep">&bull;</span></div>
+      <div class="marquee-item"><span>Zero Bland Agentic Colors</span><span class="sep">&bull;</span></div>
+    </div>
+  </div>
+
+  <!-- Hero Section with Motion 3D Tilt -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div class="hero-content reveal-left">
+        <div class="hero-tag">
+          <span class="pulse-dot"></span>
+          <span>AUTONOMOUS ATELIER &bull; LAB 12 XML ENGINE</span>
+        </div>
+        <h1 class="hero-title">
+          GEAR DESIGNED TO <span class="text-gradient">MESMERIZE.</span>
+        </h1>
+        <p class="hero-desc">
+          Step into a vibrant online purchase experience backed by an asynchronous XML DOM data architecture, smooth scroll physics, and live inventory decrementing.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="items.html" class="btn btn-primary">Explore All Items &rarr;</a>
+          <a href="purchase.html" class="btn btn-volt">Quick Purchase</a>
+          <a href="stock-pictures.html" class="btn btn-glass">Stock Pictures</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="num" id="stat-items-count">8</span>
+            <span class="label">XML Catalog Items</span>
+          </div>
+          <div class="stat-item">
+            <span class="num">100%</span>
+            <span class="label">Dynamic DOM</span>
+          </div>
+          <div class="stat-item">
+            <span class="num">0.1s</span>
+            <span class="label">Instant Stock Sync</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 3D Card Showcase -->
+      <div class="hero-showcase reveal-right">
+        <div class="floating-badge">
+          <div class="title">Live Stock Alert</div>
+          <div class="val" id="hero-stock-badge"><span class="pulse-dot"></span> 8 Units Available</div>
+        </div>
+
+        <div class="hero-card-3d tilt-card" id="hero-featured-card">
+          <img id="hero-img" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80" alt="Featured Item" />
+          <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+              <span class="badge badge-trending">FLAGSHIP ITEM</span>
+              <h3 id="hero-title" style="font-size: 1.6rem; margin-top: 0.5rem;">NovaPro Spatial Headphones</h3>
+              <p id="hero-tagline" style="color: var(--text-muted); font-size: 0.9rem;">Lossless Cinematic Audio with Neural Isolation</p>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.8rem; color: var(--text-dim); text-decoration: line-through;">$389.00</div>
+              <div id="hero-price" class="card-price" style="color: var(--accent-volt);">$299.00</div>
+            </div>
+          </div>
+          <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+            <button class="btn btn-primary btn-sm" style="flex:1;" onclick="window.App.buyNow('ITM-101')">Buy Now</button>
+            <a href="stock-pictures.html?id=ITM-101" class="btn btn-glass btn-sm">Stock Pictures</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navigation Portal Cards (Purchase, Item, Price, Stock Pictures) -->
+  <section class="container" style="padding: 4rem 1.5rem;">
+    <div class="section-header reveal">
+      <span class="section-tag">Explore The Ecosystem</span>
+      <h2 class="section-title">Everything You Need To Purchase</h2>
+      <p class="section-subtitle">Navigate through our seamlessly connected dynamic modules.</p>
+    </div>
+
+    <div class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+      <!-- Card 1: Items -->
+      <div class="product-card tilt-card reveal">
+        <div class="card-media">
+          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80" alt="Item Catalog" />
+          <div class="card-badges"><span class="badge badge-trending">MODULE 1</span></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Dynamic Items</h3>
+          <p class="card-tagline">Browse the full catalog with live search, category filtration, and specifications generated from XML.</p>
+          <div class="card-footer" style="grid-template-columns: 1fr;">
+            <a href="items.html" class="btn btn-primary">Browse Items &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Price -->
+      <div class="product-card tilt-card reveal">
+        <div class="card-media">
+          <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&auto=format&fit=crop&q=80" alt="Price Matrix" />
+          <div class="card-badges"><span class="badge badge-new">MODULE 2</span></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Price Comparison</h3>
+          <p class="card-tagline">Transparent tiered pricing, real-time multi-currency converter, and discount coupon calculators.</p>
+          <div class="card-footer" style="grid-template-columns: 1fr;">
+            <a href="price.html" class="btn btn-volt">Inspect Prices &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Stock Pictures -->
+      <div class="product-card tilt-card reveal">
+        <div class="card-media">
+          <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&auto=format&fit=crop&q=80" alt="Stock Pictures" />
+          <div class="card-badges"><span class="badge badge-limited">MODULE 3</span></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Stock Pictures</h3>
+          <p class="card-tagline">High-resolution multi-angle photography of every item with hover zoom lens and interactive angles.</p>
+          <div class="card-footer" style="grid-template-columns: 1fr;">
+            <a href="stock-pictures.html" class="btn btn-glass">View Gallery &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Purchase -->
+      <div class="product-card tilt-card reveal">
+        <div class="card-media">
+          <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80" alt="Purchase" />
+          <div class="card-badges"><span class="badge badge-staff">MODULE 4</span></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Online Purchase</h3>
+          <p class="card-tagline">Seamless checkout experience with live XML stock deduction, voucher codes, and animated receipt generation.</p>
+          <div class="card-footer" style="grid-template-columns: 1fr;">
+            <a href="purchase.html" class="btn btn-primary">Start Checkout &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Featured Products from XML -->
+  <section class="container" style="padding-bottom: 5rem;">
+    <div class="section-header reveal">
+      <span class="section-tag">Curated Collection</span>
+      <h2 class="section-title">Trending Catalog Releases</h2>
+      <p class="section-subtitle">Parsed dynamically from our structured <code>products.xml</code> data repository.</p>
+    </div>
+
+    <div class="product-grid" id="home-featured-grid">
+      <!-- Populated via JS from XML -->
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;" class="reveal">
+      <a href="items.html" class="btn btn-glass btn-sm" style="padding: 1rem 2.5rem; font-size: 1rem;">View All 8 Catalog Items &rarr;</a>
+    </div>
+  </section>
+
+  <!-- Motion Scroll Feature Banner -->
+  <section class="container reveal" style="margin-bottom: 6rem;">
+    <div style="background: linear-gradient(135deg, rgba(255, 94, 58, 0.12) 0%, rgba(204, 255, 0, 0.08) 100%); border: 1px solid var(--border-glow); border-radius: var(--radius-lg); padding: 3.5rem 2.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
+      <div style="max-width: 600px;">
+        <span class="badge badge-trending">SPECIAL PROMOTION</span>
+        <h3 style="font-size: 2.2rem; margin: 0.75rem 0;">Get 20% Off Your Entire Cart</h3>
+        <p style="color: var(--text-muted);">Apply coupon code <code style="background: rgba(0,0,0,0.4); padding: 0.2rem 0.6rem; border-radius: 4px; color: var(--accent-volt); font-weight: bold;">SAVE20</code> at checkout to unlock instant discounts across all luxury tech items.</p>
+      </div>
+      <div>
+        <a href="purchase.html" class="btn btn-volt" style="padding: 1rem 2rem; font-size: 1.05rem;">Claim Discount & Purchase</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand-logo">
+          <span class="dot"></span>
+          <span>AURA<span class="text-gradient">.IO</span></span>
+        </a>
+        <p>A dynamic, high-velocity e-commerce experience powered by XML, CSS3 motion scroll animations, and vanilla JavaScript DOM manipulation.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Required Pages</h5>
+        <ul>
+          <li><a href="items.html">Item Catalog</a></li>
+          <li><a href="price.html">Price Matrix</a></li>
+          <li><a href="stock-pictures.html">Stock Pictures</a></li>
+          <li><a href="purchase.html">Online Purchase</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Technologies</h5>
+        <ul>
+          <li><a href="#" data-trigger="view-xml">XML DOM Parser</a></li>
+          <li><a href="#">CSS3 Kinetic Scroll</a></li>
+          <li><a href="#">3D Perspective Tilt</a></li>
+          <li><a href="#">Live Stock Decrement</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Lab Verification</h5>
+        <ul>
+          <li><a href="#">Lab 12 - Web Programming</a></li>
+          <li><a href="#">Non-Agentic Custom Design</a></li>
+          <li><a href="#">Multi-Angle Stock Photos</a></li>
+          <li><a href="#" onclick="window.XMLStore.resetStock(); location.reload();">Reset Catalog Stock</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <div>&copy; 2026 AURA Online Atelier &bull; Lab 12 Web Programming Project</div>
+      <div>Designed with Precision Typography &amp; Dynamic XML</div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/xml-parser.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.XMLStore.init();
+      const items = window.XMLStore.getAllItems();
+      
+      // Update count
+      const countEl = document.getElementById('stat-items-count');
+      if (countEl) countEl.textContent = items.length;
+
+      // Populate featured items
+      const featured = items.slice(0, 3);
+      const grid = document.getElementById('home-featured-grid');
+      if (grid) {
+        grid.innerHTML = featured.map(item => `
+          <div class="product-card tilt-card reveal">
+            <div class="card-media">
+              <img src="${item.coverImage}" alt="${item.title}" />
+              <div class="card-badges">
+                <span class="badge badge-${item.badge.type}">${item.badge.text}</span>
+              </div>
+              <div class="stock-meter-pill">
+                <span class="pulse-dot"></span>
+                <span>${item.stock} in stock</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">${item.category}</div>
+              <h3 class="card-title">${item.title}</h3>
+              <p class="card-tagline">${item.tagline}</p>
+              
+              <div class="card-pricing">
+                <span class="card-price">${window.XMLStore.formatPrice(item.price)}</span>
+                <span class="card-orig-price">${window.XMLStore.formatPrice(item.originalPrice)}</span>
+                <span class="card-discount-tag">-${item.discountPercent}%</span>
+              </div>
+
+              <div class="card-footer">
+                <button class="btn btn-primary btn-sm" onclick="window.App.addToCart('${item.id}')">Add To Bag</button>
+                <a href="stock-pictures.html?id=${item.id}" class="btn btn-glass btn-sm">Stock Pics</a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        if (window.reinitCardTilt) window.reinitCardTilt();
+      }
+    });
+  </script>
+</body>
+</html>

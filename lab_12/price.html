@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA // Dynamic Price Matrix & Currency Engine</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💎</text></svg>">
+</head>
+<body>
+
+  <div id="scroll-progress"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="index.html" class="brand-logo">
+        <span class="dot"></span>
+        <span>AURA<span class="text-gradient">.IO</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="items.html" class="nav-link">Item Catalog</a></li>
+          <li><a href="price.html" class="nav-link active">Price Matrix</a></li>
+          <li><a href="stock-pictures.html" class="nav-link">Stock Pictures</a></li>
+          <li><a href="purchase.html" class="nav-link">Purchase</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-glass btn-sm" data-trigger="view-xml">&lt;/&gt; XML Data</button>
+        <button class="btn btn-cart-nav" data-trigger="cart">
+          <span>Bag</span>
+          <span class="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Title & Currency Engine -->
+  <section class="container" style="padding-top: 4rem; padding-bottom: 2rem;">
+    <div class="section-header text-left reveal">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem;">
+        <div>
+          <span class="section-tag">Dynamic Valuation Engine</span>
+          <h1 class="section-title">Transparent Price Architecture</h1>
+          <p class="section-subtitle">Real-time currency exchange rates, tiered price matrices, and dynamic cost calculator.</p>
+        </div>
+
+        <!-- Live Currency Switcher -->
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.4rem;">Select Active Currency:</div>
+          <div class="currency-bar">
+            <button class="currency-btn active" data-currency="USD">USD ($)</button>
+            <button class="currency-btn" data-currency="EUR">EUR (€)</button>
+            <button class="currency-btn" data-currency="GBP">GBP (£)</button>
+            <button class="currency-btn" data-currency="JPY">JPY (¥)</button>
+            <button class="currency-btn" data-currency="INR">INR (₹)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tiered Pricing Spectrum Cards -->
+    <div class="price-comparison-grid reveal">
+      <!-- Tier 1 -->
+      <div class="price-tier-card">
+        <span class="badge badge-trending" style="width: fit-content; margin-bottom: 1rem;">ESSENTIAL TIER</span>
+        <h3 class="tier-name">Studio Peripherals</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">High-precision daily instruments crafted for creators.</p>
+        <div class="tier-cost">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Starting From</div>
+          <div class="amount" id="tier-start-price">$119.00</div>
+        </div>
+        <ul class="tier-feature-list">
+          <li><span class="check-icon">✓</span> Optical 30K DPI Gaming Peripherals</li>
+          <li><span class="check-icon">✓</span> Dual GaN 140W Emergency Energy Hub</li>
+          <li><span class="check-icon">✓</span> 1-Year Comprehensive Warranty</li>
+          <li><span class="check-icon">✓</span> Free Standard Global Shipping</li>
+        </ul>
+        <a href="items.html" class="btn btn-glass" style="width: 100%;">View Essential Items</a>
+      </div>
+
+      <!-- Tier 2 (Featured) -->
+      <div class="price-tier-card featured">
+        <div class="tier-badge"><span class="badge badge-new">MOST POPULAR</span></div>
+        <span class="badge badge-new" style="width: fit-content; margin-bottom: 1rem;">PERFORMANCE PRO</span>
+        <h3 class="tier-name">Acoustic &amp; Tactile Mastery</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Beryllium dynamic drivers and custom magnetic Hall effect gear.</p>
+        <div class="tier-cost">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Starting From</div>
+          <div class="amount text-gradient" id="tier-pro-price">$189.00</div>
+        </div>
+        <ul class="tier-feature-list">
+          <li><span class="check-icon">✓</span> Spatial Audio Quad-ANC NovaPro</li>
+          <li><span class="check-icon">✓</span> Rapid Trigger Mechanical Brass Keyboards</li>
+          <li><span class="check-icon">✓</span> 2-Year Express Replacement Support</li>
+          <li><span class="check-icon">✓</span> Free Express Priority Delivery</li>
+        </ul>
+        <a href="items.html" class="btn btn-primary" style="width: 100%;">View Pro Range</a>
+      </div>
+
+      <!-- Tier 3 -->
+      <div class="price-tier-card">
+        <span class="badge badge-limited" style="width: fit-content; margin-bottom: 1rem;">FLAGSHIP ATELIER</span>
+        <h3 class="tier-name">Luxury Wearables &amp; Optical</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Grade-5 Titanium biometric trackers and medium format lenses.</p>
+        <div class="tier-cost">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Starting From</div>
+          <div class="amount" id="tier-flagship-price">$449.00</div>
+        </div>
+        <ul class="tier-feature-list">
+          <li><span class="check-icon">✓</span> Sapphire AMOLED 2,000-Nit Smartwatches</li>
+          <li><span class="check-icon">✓</span> 45.7MP Full-Frame Street Photography Horizon</li>
+          <li><span class="check-icon">✓</span> Micro-OLED Waveguide Augmented Optics</li>
+          <li><span class="check-icon">✓</span> VIP White-Glove Support &amp; Concierge</li>
+        </ul>
+        <a href="items.html" class="btn btn-volt" style="width: 100%;">View Flagship Gear</a>
+      </div>
+    </div>
+
+    <!-- Dynamic Live Price Calculator & Estimator -->
+    <div class="reveal" style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2.5rem; margin-bottom: 4rem;">
+      <div class="section-header text-left" style="margin-bottom: 2rem;">
+        <span class="section-tag">Interactive Estimator</span>
+        <h2 style="font-size: 1.8rem;">Live Price &amp; Discount Calculator</h2>
+        <p class="section-subtitle">Simulate quantities, apply promotional vouchers, and calculate immediate net savings.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div class="form-field">
+            <label>Select Catalog Item:</label>
+            <select id="calc-item-select" class="form-field select" style="width: 100%;">
+              <!-- Injected from XML -->
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-field">
+              <label>Purchase Quantity:</label>
+              <input type="number" id="calc-quantity" value="1" min="1" max="10" />
+            </div>
+
+            <div class="form-field">
+              <label>Shipping Tier:</label>
+              <select id="calc-shipping">
+                <option value="0">Standard Global (Free)</option>
+                <option value="19">Priority Air (+ $19.00)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Promo Code (Try "SAVE20"):</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="calc-coupon" placeholder="Enter coupon code" />
+              <button class="btn btn-volt btn-sm" id="calc-apply-btn">Apply</button>
+            </div>
+            <span id="calc-coupon-msg" style="font-size: 0.8rem; margin-top: 0.2rem;"></span>
+          </div>
+        </div>
+
+        <!-- Calculated Summary Panel -->
+        <div style="background: rgba(8, 9, 13, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.75rem;">
+          <h4 style="font-size: 1.1rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between;">
+            <span>Estimated Price Breakdown</span>
+            <span id="calc-currency-badge" class="badge badge-trending">USD</span>
+          </h4>
+
+          <div class="summary-calc-table" style="border: none; padding: 0;">
+            <div class="calc-row">
+              <span>Item Unit Price:</span>
+              <span id="calc-unit-price">$0.00</span>
+            </div>
+            <div class="calc-row">
+              <span>Quantity Subtotal:</span>
+              <span id="calc-subtotal">$0.00</span>
+            </div>
+            <div class="calc-row">
+              <span>Discount Savings:</span>
+              <span id="calc-discount" style="color: var(--accent-volt);">-$0.00</span>
+            </div>
+            <div class="calc-row">
+              <span>Shipping &amp; Logistics:</span>
+              <span id="calc-shipping-val">Free</span>
+            </div>
+            <div class="calc-row">
+              <span>Estimated Tax (8%):</span>
+              <span id="calc-tax">$0.00</span>
+            </div>
+            <div class="calc-row total" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+              <span>Net Total:</span>
+              <span id="calc-final-total" style="color: var(--accent-volt);">$0.00</span>
+            </div>
+          </div>
+
+          <button id="calc-purchase-btn" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
+            Proceed To Purchase &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Complete Dynamic Price Table comparing all XML Items -->
+    <div class="reveal">
+      <div class="section-header text-left" style="margin-bottom: 1.5rem;">
+        <span class="section-tag">Catalog Price Matrix</span>
+        <h2 style="font-size: 1.8rem;">Comprehensive Price Comparison</h2>
+      </div>
+
+      <div style="overflow-x: auto; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1rem;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border-subtle); color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;">
+              <th style="padding: 1rem;">Item Details</th>
+              <th style="padding: 1rem;">Category</th>
+              <th style="padding: 1rem;">Original Price</th>
+              <th style="padding: 1rem;">Current Price</th>
+              <th style="padding: 1rem;">Savings</th>
+              <th style="padding: 1rem;">Inventory</th>
+              <th style="padding: 1rem; text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="price-table-body">
+            <!-- Dynamic rows generated from XML -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 AURA Online Atelier &bull; Dynamic Price Matrix Module</div>
+      <div>Dynamic JavaScript Currency Engine &amp; XML Parsing</div>
+    </div>
+  </footer>
+
+  <script src="js/xml-parser.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let activePromoRate = 0;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.XMLStore.init();
+      renderPriceTable();
+      populateCalcSelect();
+      updateEstimator();
+
+      // Recalculate when currency switch is clicked
+      window.refreshCatalogPrices = () => {
+        renderPriceTable();
+        updateEstimator();
+        updateTierCards();
+      };
+
+      // Calculator Listeners
+      document.getElementById('calc-item-select').addEventListener('change', updateEstimator);
+      document.getElementById('calc-quantity').addEventListener('input', updateEstimator);
+      document.getElementById('calc-shipping').addEventListener('change', updateEstimator);
+
+      document.getElementById('calc-apply-btn').addEventListener('click', () => {
+        const code = document.getElementById('calc-coupon').value.trim().toUpperCase();
+        const msgEl = document.getElementById('calc-coupon-msg');
+        if (code === 'SAVE20') {
+          activePromoRate = 0.20;
+          msgEl.textContent = '✓ 20% discount coupon applied successfully!';
+          msgEl.style.color = 'var(--accent-volt)';
+        } else if (code === 'VIP30') {
+          activePromoRate = 0.30;
+          msgEl.textContent = '✓ 30% VIP discount applied!';
+          msgEl.style.color = 'var(--accent-volt)';
+        } else {
+          activePromoRate = 0;
+          msgEl.textContent = '⚠ Invalid promotional code';
+          msgEl.style.color = 'var(--accent-secondary)';
+        }
+        updateEstimator();
+      });
+
+      document.getElementById('calc-purchase-btn').addEventListener('click', () => {
+        const select = document.getElementById('calc-item-select');
+        const qty = parseInt(document.getElementById('calc-quantity').value, 10) || 1;
+        window.App.addToCart(select.value, qty);
+        window.location.href = 'purchase.html';
+      });
+
+      updateTierCards();
+    });
+
+    function updateTierCards() {
+      const cur = window.App.currentCurrency;
+      document.getElementById('tier-start-price').textContent = window.XMLStore.formatPrice(119, cur);
+      document.getElementById('tier-pro-price').textContent = window.XMLStore.formatPrice(189, cur);
+      document.getElementById('tier-flagship-price').textContent = window.XMLStore.formatPrice(449, cur);
+    }
+
+    function renderPriceTable() {
+      const tbody = document.getElementById('price-table-body');
+      if (!tbody) return;
+
+      const items = window.XMLStore.getAllItems();
+      const cur = window.App.currentCurrency;
+
+      tbody.innerHTML = items.map(item => {
+        const savings = item.originalPrice - item.price;
+        return `
+          <tr style="border-bottom: 1px solid var(--border-subtle); transition: background 0.2s;" onmouseenter="this.style.background='rgba(255,255,255,0.02)'" onmouseleave="this.style.background='transparent'">
+            <td style="padding: 1rem; display: flex; align-items: center; gap: 0.85rem;">
+              <img src="${item.coverImage}" alt="${item.title}" style="width: 44px; height: 44px; border-radius: 6px; object-fit: cover;" />
+              <div>
+                <strong style="color: var(--text-main); font-size: 0.95rem;">${item.title}</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">${item.id}</div>
+              </div>
+            </td>
+            <td style="padding: 1rem; font-size: 0.85rem; color: var(--text-muted);">${item.category}</td>
+            <td style="padding: 1rem; font-size: 0.9rem; color: var(--text-dim); text-decoration: line-through;">${window.XMLStore.formatPrice(item.originalPrice, cur)}</td>
+            <td style="padding: 1rem; font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--accent-volt);">${window.XMLStore.formatPrice(item.price, cur)}</td>
+            <td style="padding: 1rem;">
+              <span class="badge badge-trending">Save ${window.XMLStore.formatPrice(savings, cur)} (-${item.discountPercent}%)</span>
+            </td>
+            <td style="padding: 1rem; font-size: 0.85rem;">
+              <span class="pulse-dot"></span> ${item.stock} in stock
+            </td>
+            <td style="padding: 1rem; text-align: right;">
+              <button class="btn btn-primary btn-sm" onclick="window.App.addToCart('${item.id}')">Add Bag</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function populateCalcSelect() {
+      const select = document.getElementById('calc-item-select');
+      const items = window.XMLStore.getAllItems();
+      select.innerHTML = items.map(item => `
+        <option value="${item.id}">${item.title} (${window.XMLStore.formatPrice(item.price)})</option>
+      `).join('');
+    }
+
+    function updateEstimator() {
+      const select = document.getElementById('calc-item-select');
+      const qtyInput = document.getElementById('calc-quantity');
+      const shippingSelect = document.getElementById('calc-shipping');
+      const cur = window.App.currentCurrency;
+
+      const item = window.XMLStore.getItemById(select.value);
+      if (!item) return;
+
+      const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+      const shippingCost = parseFloat(shippingSelect.value);
+
+      const subtotal = item.price * qty;
+      const discount = subtotal * activePromoRate;
+      const tax = (subtotal - discount) * 0.08;
+      const total = subtotal - discount + tax + shippingCost;
+
+      document.getElementById('calc-currency-badge').textContent = cur;
+      document.getElementById('calc-unit-price').textContent = window.XMLStore.formatPrice(item.price, cur);
+      document.getElementById('calc-subtotal').textContent = window.XMLStore.formatPrice(subtotal, cur);
+      document.getElementById('calc-discount').textContent = `-${window.XMLStore.formatPrice(discount, cur)} (${activePromoRate * 100}%)`;
+      document.getElementById('calc-shipping-val').textContent = shippingCost > 0 ? window.XMLStore.formatPrice(shippingCost, cur) : 'Free';
+      document.getElementById('calc-tax').textContent = window.XMLStore.formatPrice(tax, cur);
+      document.getElementById('calc-final-total').textContent = window.XMLStore.formatPrice(total, cur);
+    }
+  </script>
+</body>
+</html>

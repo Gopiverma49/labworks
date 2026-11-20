@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA // Items Catalog - Dynamic XML Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📦</text></svg>">
+</head>
+<body>
+
+  <div id="scroll-progress"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="index.html" class="brand-logo">
+        <span class="dot"></span>
+        <span>AURA<span class="text-gradient">.IO</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="items.html" class="nav-link active">Item Catalog</a></li>
+          <li><a href="price.html" class="nav-link">Price Matrix</a></li>
+          <li><a href="stock-pictures.html" class="nav-link">Stock Pictures</a></li>
+          <li><a href="purchase.html" class="nav-link">Purchase</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-glass btn-sm" data-trigger="view-xml">&lt;/&gt; XML Data</button>
+        <button class="btn btn-cart-nav" data-trigger="cart">
+          <span>Bag</span>
+          <span class="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Title Section -->
+  <section class="container" style="padding-top: 4rem; padding-bottom: 2rem;">
+    <div class="section-header text-left reveal">
+      <span class="section-tag">XML Data Binding</span>
+      <h1 class="section-title">Item Catalog &amp; Specifications</h1>
+      <p class="section-subtitle">Real-time inventory and technical parameters parsed dynamically from <code>products.xml</code>.</p>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="filter-bar reveal">
+      <div class="category-pills" id="category-filter-group">
+        <button class="pill-btn active" data-category="All">All Items</button>
+        <button class="pill-btn" data-category="Audio">Audio</button>
+        <button class="pill-btn" data-category="Wearables">Wearables</button>
+        <button class="pill-btn" data-category="Gaming">Gaming</button>
+        <button class="pill-btn" data-category="Lifestyle">Lifestyle</button>
+      </div>
+
+      <div class="search-sort-group">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="catalog-search" placeholder="Search items, specs, tags..." />
+        </div>
+        <select class="sort-select" id="catalog-sort">
+          <option value="featured">Featured First</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="stock-desc">Stock: Highest</option>
+          <option value="rating-desc">Rating: Highest</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Items Grid Container -->
+    <div class="product-grid" id="items-catalog-grid">
+      <!-- Injected via JavaScript from XML -->
+    </div>
+  </section>
+
+  <!-- Quick Specification Detail Modal -->
+  <div id="item-modal-overlay" class="modal-overlay">
+    <div class="modal-content" style="max-width: 720px;">
+      <button class="modal-close-btn" id="close-item-modal">&times;</button>
+      <div id="item-modal-body">
+        <!-- Injected on click -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <div>&copy; 2026 AURA Online Atelier &bull; Item Catalog Module</div>
+      <div>Dynamic XML DOM Rendering Engine</div>
+    </div>
+  </footer>
+
+  <script src="js/xml-parser.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentCategory = 'All';
+    let searchQuery = '';
+    let currentSort = 'featured';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await window.XMLStore.init();
+      renderCatalog();
+
+      // Category Pill Listeners
+      const pillButtons = document.querySelectorAll('.pill-btn');
+      pillButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          pillButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentCategory = btn.dataset.category;
+          renderCatalog();
+        });
+      });
+
+      // Search Listener
+      const searchInput = document.getElementById('catalog-search');
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderCatalog();
+      });
+
+      // Sort Listener
+      const sortSelect = document.getElementById('catalog-sort');
+      sortSelect.addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderCatalog();
+      });
+
+      // Modal Close
+      const itemModal = document.getElementById('item-modal-overlay');
+      const closeItemModal = document.getElementById('close-item-modal');
+      closeItemModal.addEventListener('click', () => itemModal.classList.remove('active'));
+      itemModal.addEventListener('click', (e) => {
+        if (e.target === itemModal) itemModal.classList.remove('active');
+      });
+    });
+
+    function renderCatalog() {
+      const grid = document.getElementById('items-catalog-grid');
+      if (!grid) return;
+
+      let items = window.XMLStore.getAllItems();
+
+      // Filter by Category
+      if (currentCategory !== 'All') {
+        items = items.filter(i => i.category.toLowerCase() === currentCategory.toLowerCase());
+      }
+
+      // Filter by Search
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        items = items.filter(i => 
+          i.title.toLowerCase().includes(q) ||
+          i.tagline.toLowerCase().includes(q) ||
+          i.category.toLowerCase().includes(q) ||
+          i.description.toLowerCase().includes(q)
+        );
+      }
+
+      // Sorting
+      if (currentSort === 'price-asc') {
+        items.sort((a, b) => a.price - b.price);
+      } else if (currentSort === 'price-desc') {
+        items.sort((a, b) => b.price - a.price);
+      } else if (currentSort === 'stock-desc') {
+        items.sort((a, b) => b.stock - a.stock);
+      } else if (currentSort === 'rating-desc') {
+        items.sort((a, b) => b.rating - a.rating);
+      } else if (currentSort === 'featured') {
+        items.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+      }
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: var(--text-muted);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+            <h3 style="font-size: 1.5rem; color: var(--text-main);">No matching items found</h3>
+            <p>Try searching for a different keyword or select "All Items".</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => `
+        <div class="product-card tilt-card reveal">
+          <div class="card-media">
+            <img src="${item.coverImage}" alt="${item.title}" />
+            <div class="card-badges">
+              <span class="badge badge-${item.badge.type}">${item.badge.text}</span>
+            </div>
+            <div class="stock-meter-pill">
+              <span class="pulse-dot"></span>
+              <span>${item.stock} in stock</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-cat">${item.category} &bull; Rating ${item.rating} ★</div>
+            <h3 class="card-title">${item.title}</h3>
+            <p class="card-tagline">${item.tagline}</p>
+
+            <div class="card-specs-mini">
+              ${item.specifications.slice(0, 2).map(s => `
+                <span class="spec-chip">${s.label}: <strong>${s.value}</strong></span>
+              `).join('')}
+            </div>
+
+            <div class="card-pricing">
+              <span class="card-price">${window.XMLStore.formatPrice(item.price)}</span>
+              <span class="card-orig-price">${window.XMLStore.formatPrice(item.originalPrice)}</span>
+              <span class="card-discount-tag">-${item.discountPercent}%</span>
+            </div>
+
+            <div class="card-footer">
+              <button class="btn btn-primary btn-sm" onclick="window.App.addToCart('${item.id}')">Add To Bag</button>
+              <button class="btn btn-glass btn-sm" onclick="openItemDetails('${item.id}')">Quick View</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.reinitCardTilt) window.reinitCardTilt();
+    }
+
+    window.openItemDetails = function(itemId) {
+      const item = window.XMLStore.getItemById(itemId);
+      if (!item) return;
+
+      const modalBody = document.getElementById('item-modal-body');
+      modalBody.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; align-items: start;">
+          <div>
+            <img src="${item.coverImage}" alt="${item.title}" style="width: 100%; border-radius: var(--radius-md); object-fit: cover; max-height: 280px;" />
+            <div style="margin-top: 1rem; text-align: center;">
+              <a href="stock-pictures.html?id=${item.id}" class="btn btn-glass btn-sm" style="width: 100%;">View All Stock Pictures &rarr;</a>
+            </div>
+          </div>
+          <div>
+            <span class="badge badge-${item.badge.type}">${item.badge.text}</span>
+            <h3 style="font-size: 1.6rem; margin: 0.5rem 0 0.2rem;">${item.title}</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">${item.tagline}</p>
+
+            <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem;">
+              <span style="font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--accent-volt);">${window.XMLStore.formatPrice(item.price)}</span>
+              <span style="color: var(--text-dim); text-decoration: line-through;">${window.XMLStore.formatPrice(item.originalPrice)}</span>
+              <span class="badge badge-trending">${item.urgency}</span>
+            </div>
+
+            <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-muted); margin-bottom: 1.25rem;">${item.description}</p>
+
+            <h5 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); margin-bottom: 0.5rem;">Hardware Specifications:</h5>
+            <table class="specs-table" style="margin-top: 0.25rem;">
+              ${item.specifications.map(s => `
+                <tr>
+                  <td class="spec-key">${s.label}</td>
+                  <td class="spec-val">${s.value}</td>
+                </tr>
+              `).join('')}
+            </table>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.5rem;">
+              <button class="btn btn-primary" onclick="window.App.buyNow('${item.id}')">Buy Now</button>
+              <button class="btn btn-volt" onclick="window.App.addToCart('${item.id}')">+ Add To Bag</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('item-modal-overlay').classList.add('active');
+    };
+  </script>
+</body>
+</html>
