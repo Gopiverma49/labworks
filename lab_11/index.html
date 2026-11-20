@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 11 - User Login & Database Validation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <!-- Navigation Tabs: Login Form vs Database Tables Viewer -->
+        <nav class="app-tabs" aria-label="Main Navigation">
+            <button class="tab-btn active" id="tabAuth" onclick="switchMainTab('auth')">
+                &#128273; User Validation
+            </button>
+            <button class="tab-btn" id="tabDatabase" onclick="switchMainTab('database')">
+                &#128452; Database Tables Viewer
+            </button>
+        </nav>
+
+        <!-- ======================================================= -->
+        <!-- VIEW 1: AUTHENTICATION (LOGIN / SUCCESS / FAILURE)      -->
+        <!-- ======================================================= -->
+        <main id="authView" style="width: 100%; display: flex; justify-content: center;">
+
+            <!-- SUB-VIEW 1A: LOGIN FORM -->
+            <section class="app-card" id="loginCard">
+                <header class="app-header">
+                    <span class="badge-tag">Experiment 11 &bull; User Validation</span>
+                    <h1>User Login</h1>
+                    <p>Submit your login name &amp; password to validate against database records</p>
+                </header>
+
+                <form id="loginForm" onsubmit="handleLoginSubmit(event)" novalidate>
+                    <div class="form-group">
+                        <label for="loginUsername">Login Name / Username</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="loginUsername" 
+                                class="form-control" 
+                                placeholder="Enter login name (e.g. admin or student)" 
+                                required 
+                                autofocus
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="loginPassword" 
+                                class="form-control" 
+                                placeholder="Enter password" 
+                                required
+                            >
+                            <button 
+                                type="button" 
+                                class="toggle-password" 
+                                id="togglePasswordBtn" 
+                                onclick="togglePasswordVisibility()" 
+                                title="Show/Hide Password"
+                                aria-label="Toggle password visibility"
+                            >
+                                &#128065;
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        Submit &amp; Validate &rarr;
+                    </button>
+                </form>
+
+                <!-- Quick-Fill Available Credentials in Database -->
+                <div class="demo-box">
+                    <div class="demo-title">
+                        <span>Database Records Available</span>
+                        <span style="font-size: 0.72rem; color: #94a3b8;">Click to test</span>
+                    </div>
+                    <div class="demo-list">
+                        <button type="button" class="demo-chip" onclick="quickFill('admin', 'admin123')">
+                            <code>admin</code> / admin123
+                        </button>
+                        <button type="button" class="demo-chip" onclick="quickFill('student', 'student123')">
+                            <code>student</code> / student123
+                        </button>
+                        <button type="button" class="demo-chip" onclick="quickFill('john_doe', 'password123')">
+                            <code>john_doe</code> / password123
+                        </button>
+                        <button type="button" class="demo-chip" onclick="quickFill('alice', 'secret456')">
+                            <code>alice</code> / secret456
+                        </button>
+                        <button type="button" class="demo-chip" style="border-color: #fecaca; color: #dc2626;" onclick="quickFill('wrong_user', 'badpass999')">
+                            <code>invalid_demo</code> (Failure test)
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; padding-top: 4px;">
+                    <button type="button" class="back-link" style="background: none; border: none; cursor: pointer; color: var(--primary); font-weight: 600;" onclick="openAddUserModal()">
+                        + Add New User to DB
+                    </button>
+                    <a href="../" class="back-link">
+                        &larr; Back to Lab Portal
+                    </a>
+                </div>
+            </section>
+
+            <!-- SUB-VIEW 1B: SUCCESSFUL LOGIN PAGE -->
+            <section class="app-card wide" id="successCard" style="display: none;">
+                <header class="app-header">
+                    <span class="badge-tag" style="background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border);">
+                        Database Match Confirmed
+                    </span>
+                    <h1 style="color: #065f46;">Login Successful!</h1>
+                    <p>Welcome back, <strong id="successFullName">User</strong></p>
+                </header>
+
+                <div class="alert-box alert-success">
+                    <div class="alert-icon">&#9989;</div>
+                    <h2>Authentication Successful</h2>
+                    <p>
+                        The login name and password matched records available in the <code>users</code> table of the database. Access has been granted.
+                    </p>
+                </div>
+
+                <!-- Retrieved User Information from Database -->
+                <div class="info-panel">
+                    <span class="info-title">Matched Record in Database (users &cross; roles)</span>
+                    <div class="info-grid">
+                        <div class="info-tile">
+                            <span class="label">User Full Name</span>
+                            <span class="value" id="resFullName">-</span>
+                        </div>
+                        <div class="info-tile">
+                            <span class="label">Login Name / Username</span>
+                            <span class="value" id="resUsername">-</span>
+                        </div>
+                        <div class="info-tile">
+                            <span class="label">Assigned Role</span>
+                            <span class="value" id="resRole">-</span>
+                        </div>
+                        <div class="info-tile">
+                            <span class="label">Database User ID</span>
+                            <span class="value" id="resUserId">-</span>
+                        </div>
+                        <div class="info-tile">
+                            <span class="label">Access Privileges</span>
+                            <span class="value" id="resAccessLevel">-</span>
+                        </div>
+                        <div class="info-tile">
+                            <span class="label">Validation Timestamp</span>
+                            <span class="value" id="resTimestamp">-</span>
+                        </div>
+                        <div class="info-tile full-width">
+                            <span class="label">Email Address</span>
+                            <span class="value" id="resEmail">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions-row">
+                    <button type="button" class="btn btn-secondary" onclick="switchMainTab('database')">
+                        &#128452; View Database Tables
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="handleLogout()">
+                        Logout &larr;
+                    </button>
+                </div>
+            </section>
+
+            <!-- SUB-VIEW 1C: FAILURE MESSAGE PAGE -->
+            <section class="app-card" id="failureCard" style="display: none;">
+                <header class="app-header">
+                    <span class="badge-tag" style="background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border);">
+                        Authentication Error
+                    </span>
+                    <h1 style="color: #991b1b;">Login Failed</h1>
+                    <p>Credentials checked against database: No match found</p>
+                </header>
+
+                <div class="alert-box alert-danger">
+                    <div class="alert-icon">&#10060;</div>
+                    <h2>Failure: Invalid Credentials</h2>
+                    <p id="failureReasonText">
+                        The submitted login name and password combination does not match any record available in the database.
+                    </p>
+                </div>
+
+                <div class="info-panel" style="background: #fff5f5; border-color: #fed7d7;">
+                    <span class="info-title" style="color: #991b1b;">Attempt Details</span>
+                    <div class="info-grid">
+                        <div class="info-tile full-width">
+                            <span class="label">Submitted Login Name</span>
+                            <span class="value" id="failAttemptUsername">-</span>
+                        </div>
+                        <div class="info-tile full-width">
+                            <span class="label">Database Check Result</span>
+                            <span class="value" style="color: var(--danger);">Record Not Found / Password Mismatch</span>
+                        </div>
+                        <div class="info-tile full-width">
+                            <span class="label">Attempt Time</span>
+                            <span class="value" id="failAttemptTime">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-danger" onclick="returnToLogin()">
+                    &#8634; Try Again
+                </button>
+            </section>
+
+        </main>
+
+        <!-- ======================================================= -->
+        <!-- VIEW 2: DATABASE VIEWER ("ONE DATABASE, DIFFERENT TABLES") -->
+        <!-- ======================================================= -->
+        <section class="app-card wide" id="databaseView" style="display: none;">
+            <header class="app-header">
+                <span class="badge-tag" style="background: #eff6ff; color: var(--primary);">
+                    Single Relational Store: UserValidationDB
+                </span>
+                <h1>Database Tables Viewer</h1>
+                <p>One unified database containing distinct tables (<code>users</code>, <code>roles</code>, and <code>login_logs</code>)</p>
+            </header>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <!-- Sub-tabs for switching between tables -->
+                <div class="tables-subtabs" style="margin-bottom: 0; border-bottom: none;">
+                    <button class="subtab-btn active" id="subtabUsers" onclick="switchTableTab('users')">
+                        Table 1: users (<span id="usersCount">0</span>)
+                    </button>
+                    <button class="subtab-btn" id="subtabRoles" onclick="switchTableTab('roles')">
+                        Table 2: roles (<span id="rolesCount">0</span>)
+                    </button>
+                    <button class="subtab-btn" id="subtabLogs" onclick="switchTableTab('logs')">
+                        Table 3: login_logs (<span id="logsCount">0</span>)
+                    </button>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="openAddUserModal()">
+                        + Add User
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetDatabaseToDefault()" title="Reset database to initial records">
+                        Reset DB
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table 1: users -->
+            <div id="tableUsersContainer">
+                <div class="table-wrapper">
+                    <table class="db-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Full Name</th>
+                                <th>Role ID</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Table 2: roles -->
+            <div id="tableRolesContainer" style="display: none;">
+                <div class="table-wrapper">
+                    <table class="db-table">
+                        <thead>
+                            <tr>
+                                <th>Role ID</th>
+                                <th>Role Name</th>
+                                <th>Access Level</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rolesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Table 3: login_logs -->
+            <div id="tableLogsContainer" style="display: none;">
+                <div class="table-wrapper">
+                    <table class="db-table">
+                        <thead>
+                            <tr>
+                                <th>Log ID</th>
+                                <th>Username Attempted</th>
+                                <th>Timestamp</th>
+                                <th>Validation Result</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="switchMainTab('auth')">
+                    &larr; Back to Login Validation
+                </button>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                    Database Engine: Client-Side Relational Store (IndexedDB &amp; LocalStorage)
+                </span>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL: ADD NEW USER TO DATABASE                         -->
+    <!-- ======================================================= -->
+    <div class="modal-overlay" id="addUserModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card">
+            <header>
+                <h2 style="font-size: 1.3rem; font-weight: 700;">Add Record to `users` Table</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                    This record is saved in the database and can be immediately validated.
+                </p>
+            </header>
+
+            <form id="addUserForm" onsubmit="handleAddNewUser(event)">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label for="newFullName">Full Name *</label>
+                    <input type="text" id="newFullName" class="form-control" placeholder="e.g. Rachel Green" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label for="newUsername">Username / Login Name *</label>
+                    <input type="text" id="newUsername" class="form-control" placeholder="e.g. rachel" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label for="newPassword">Password *</label>
+                    <input type="password" id="newPassword" class="form-control" placeholder="Enter a password" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label for="newEmail">Email Address</label>
+                    <input type="email" id="newEmail" class="form-control" placeholder="e.g. rachel@college.edu">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 18px;">
+                    <label for="newRoleId">Role (Foreign Key &rarr; roles table)</label>
+                    <select id="newRoleId" class="form-control">
+                        <option value="1">1 - Administrator (Full System Access)</option>
+                        <option value="2">2 - Faculty (Academic &amp; Grading Access)</option>
+                        <option value="3" selected>3 - Student (Standard Course Portal)</option>
+                    </select>
+                </div>
+
+                <div class="actions-row">
+                    <button type="submit" class="btn btn-primary">
+                        Save to Database
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAddUserModal()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- JAVASCRIPT: DATABASE ENGINE & APPLICATION CONTROLLER    -->
+    <!-- ======================================================= -->
+    <script>
+        /**
+         * ONE DATABASE WITH DIFFERENT TABLES
+         * Database Name: UserValidationDB
+         * Tables:
+         *   1. users      (id, username, password, full_name, role_id, email)
+         *   2. roles      (id, role_name, access_level, description)
+         *   3. login_logs (id, username, timestamp, status)
+         */
+
+        const DB_STORAGE_KEY = 'UserValidationDB_Tables';
+
+        // Default seed data for the single database
+        const DEFAULT_DATABASE = {
+            roles: [
+                { id: 1, role_name: "Administrator", access_level: "Full System Admin", description: "Complete server & database management rights" },
+                { id: 2, role_name: "Faculty", access_level: "Departmental Access", description: "Course and grading access" },
+                { id: 3, role_name: "Student", access_level: "Standard Access", description: "Student portal & assignment access" }
+            ],
+            users: [
+                { id: 1, username: "admin", password: "admin123", full_name: "System Administrator", role_id: 1, email: "admin@college.edu" },
+                { id: 2, username: "student", password: "student123", full_name: "Demo Student", role_id: 3, email: "student@campus.ac.in" },
+                { id: 3, username: "john_doe", password: "password123", full_name: "John Doe", role_id: 3, email: "john.doe@example.com" },
+                { id: 4, username: "alice", password: "secret456", full_name: "Prof. Alice Smith", role_id: 2, email: "alice.smith@university.edu" }
+            ],
+            login_logs: [
+                { id: 1, username: "admin", timestamp: "18-11-2026 10:00:00 AM", status: "SUCCESS" }
+            ]
+        };
+
+        // In-memory active database instance
+        let appDB = null;
+
+        // Initialize Database
+        function initDatabase() {
+            try {
+                const stored = localStorage.getItem(DB_STORAGE_KEY);
+                if (stored) {
+                    appDB = JSON.parse(stored);
+                } else {
+                    appDB = JSON.parse(JSON.stringify(DEFAULT_DATABASE));
+                    saveDatabase();
+                }
+            } catch (e) {
+                console.warn("Storage access restricted, using in-memory database:", e);
+                appDB = JSON.parse(JSON.stringify(DEFAULT_DATABASE));
+            }
+            renderDatabaseTables();
+        }
+
+        // Save Database to persistent storage
+        function saveDatabase() {
+            try {
+                localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(appDB));
+            } catch (e) {
+                console.warn("Unable to write to localStorage:", e);
+            }
+            renderDatabaseTables();
+        }
+
+        // Reset database to initial records
+        function resetDatabaseToDefault() {
+            if (confirm("Reset the database back to initial sample records?")) {
+                appDB = JSON.parse(JSON.stringify(DEFAULT_DATABASE));
+                saveDatabase();
+                alert("Database has been reset to default tables & records.");
+            }
+        }
+
+        /**
+         * Server-like validation routine:
+         * Checks username and password against the data available in the 'users' table
+         * Cross-references 'roles' table for role details.
+         */
+        function validateCredentials(username, password) {
+            const cleanUser = (username || '').trim().toLowerCase();
+            const cleanPass = (password || '').trim();
+
+            if (!cleanUser || !cleanPass) return null;
+
+            // Query 'users' table in the database
+            const foundUser = appDB.users.find(u => u.username.toLowerCase() === cleanUser && u.password === cleanPass);
+
+            if (foundUser) {
+                // Join with 'roles' table
+                const foundRole = appDB.roles.find(r => r.id === foundUser.role_id) || {
+                    role_name: 'Standard User',
+                    access_level: 'General',
+                    description: 'Standard access'
+                };
+
+                return {
+                    ...foundUser,
+                    role: foundRole.role_name,
+                    access_level: foundRole.access_level,
+                    role_description: foundRole.description
+                };
+            }
+
+            return null;
+        }
+
+        /**
+         * Form Submission Handler
+         */
+        function handleLoginSubmit(event) {
+            event.preventDefault();
+
+            const usernameInput = document.getElementById('loginUsername');
+            const passwordInput = document.getElementById('loginPassword');
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!username || !password) {
+                alert("Please fill in both Login Name and Password.");
+                return;
+            }
+
+            // Current timestamp
+            const now = new Date();
+            const timestampStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+
+            // Check against database
+            const matchedUser = validateCredentials(username, password);
+
+            // Log attempt to 'login_logs' table in database
+            const newLogId = (appDB.login_logs.length > 0 ? Math.max(...appDB.login_logs.map(l => l.id)) : 0) + 1;
+            appDB.login_logs.unshift({
+                id: newLogId,
+                username: username,
+                timestamp: timestampStr,
+                status: matchedUser ? "SUCCESS" : "FAILURE"
+            });
+            saveDatabase();
+
+            // Return Success Page or Failure Message
+            if (matchedUser) {
+                showSuccessPage(matchedUser, timestampStr);
+            } else {
+                showFailurePage(username, timestampStr);
+            }
+        }
+
+        // Show Successful Login View
+        function showSuccessPage(user, timestamp) {
+            document.getElementById('loginCard').style.display = 'none';
+            document.getElementById('failureCard').style.display = 'none';
+            document.getElementById('successCard').style.display = 'flex';
+
+            document.getElementById('successFullName').textContent = user.full_name;
+            document.getElementById('resFullName').textContent = user.full_name;
+            document.getElementById('resUsername').textContent = user.username;
+            document.getElementById('resUserId').textContent = '#' + user.id;
+            document.getElementById('resEmail').textContent = user.email || 'None';
+            document.getElementById('resAccessLevel').textContent = user.access_level;
+            document.getElementById('resTimestamp').textContent = timestamp;
+
+            const roleEl = document.getElementById('resRole');
+            roleEl.innerHTML = `<span class="role-badge ${getRoleBadgeClass(user.role)}">${escapeHtml(user.role)}</span>`;
+        }
+
+        // Show Failure Message View
+        function showFailurePage(username, timestamp) {
+            document.getElementById('loginCard').style.display = 'none';
+            document.getElementById('successCard').style.display = 'none';
+            document.getElementById('failureCard').style.display = 'flex';
+
+            document.getElementById('failAttemptUsername').textContent = username || '(Empty)';
+            document.getElementById('failAttemptTime').textContent = timestamp;
+            document.getElementById('failureReasonText').innerHTML = 
+                `The submitted login name <strong>"${escapeHtml(username)}"</strong> and password combination was not found in the database. Please verify your credentials and try again.`;
+        }
+
+        // Return to Login Form (from Failure view)
+        function returnToLogin() {
+            document.getElementById('failureCard').style.display = 'none';
+            document.getElementById('successCard').style.display = 'none';
+            document.getElementById('loginCard').style.display = 'flex';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginUsername').focus();
+        }
+
+        // Logout
+        function handleLogout() {
+            document.getElementById('successCard').style.display = 'none';
+            document.getElementById('failureCard').style.display = 'none';
+            document.getElementById('loginCard').style.display = 'flex';
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginUsername').focus();
+        }
+
+        // Quick-Fill Demo Account
+        function quickFill(user, pass) {
+            document.getElementById('loginUsername').value = user;
+            document.getElementById('loginPassword').value = pass;
+            document.getElementById('loginPassword').focus();
+        }
+
+        // Toggle Password Visibility
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('loginPassword');
+            const btn = document.getElementById('togglePasswordBtn');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                btn.innerHTML = '&#128584;';
+            } else {
+                passInput.type = 'password';
+                btn.innerHTML = '&#128065;';
+            }
+        }
+
+        // Switch Main Tabs
+        function switchMainTab(tab) {
+            const tabAuth = document.getElementById('tabAuth');
+            const tabDatabase = document.getElementById('tabDatabase');
+            const authView = document.getElementById('authView');
+            const databaseView = document.getElementById('databaseView');
+
+            if (tab === 'auth') {
+                tabAuth.classList.add('active');
+                tabDatabase.classList.remove('active');
+                authView.style.display = 'flex';
+                databaseView.style.display = 'none';
+            } else {
+                tabDatabase.classList.add('active');
+                tabAuth.classList.remove('active');
+                authView.style.display = 'none';
+                databaseView.style.display = 'flex';
+                renderDatabaseTables();
+            }
+        }
+
+        // Switch Database Tables Subtabs
+        function switchTableTab(table) {
+            const btnUsers = document.getElementById('subtabUsers');
+            const btnRoles = document.getElementById('subtabRoles');
+            const btnLogs = document.getElementById('subtabLogs');
+
+            const contUsers = document.getElementById('tableUsersContainer');
+            const contRoles = document.getElementById('tableRolesContainer');
+            const contLogs = document.getElementById('tableLogsContainer');
+
+            btnUsers.classList.remove('active');
+            btnRoles.classList.remove('active');
+            btnLogs.classList.remove('active');
+
+            contUsers.style.display = 'none';
+            contRoles.style.display = 'none';
+            contLogs.style.display = 'none';
+
+            if (table === 'users') {
+                btnUsers.classList.add('active');
+                contUsers.style.display = 'block';
+            } else if (table === 'roles') {
+                btnRoles.classList.add('active');
+                contRoles.style.display = 'block';
+            } else if (table === 'logs') {
+                btnLogs.classList.add('active');
+                contLogs.style.display = 'block';
+            }
+        }
+
+        // Render Database Tables
+        function renderDatabaseTables() {
+            if (!appDB) return;
+
+            // 1. users table
+            document.getElementById('usersCount').textContent = appDB.users.length;
+            const usersTbody = document.getElementById('usersTableBody');
+            usersTbody.innerHTML = appDB.users.map(u => `
+                <tr>
+                    <td><strong>#${u.id}</strong></td>
+                    <td><code>${escapeHtml(u.username)}</code></td>
+                    <td><span style="letter-spacing: 2px; color: #64748b;">&bull;&bull;&bull;&bull;&bull;&bull;</span> <small style="color: #94a3b8; font-size: 0.72rem;">(${escapeHtml(u.password)})</small></td>
+                    <td>${escapeHtml(u.full_name)}</td>
+                    <td><span class="role-badge ${getRoleIdBadgeClass(u.role_id)}">Role #${u.role_id}</span></td>
+                    <td>${escapeHtml(u.email || '-')}</td>
+                </tr>
+            `).join('');
+
+            // 2. roles table
+            document.getElementById('rolesCount').textContent = appDB.roles.length;
+            const rolesTbody = document.getElementById('rolesTableBody');
+            rolesTbody.innerHTML = appDB.roles.map(r => `
+                <tr>
+                    <td><strong>#${r.id}</strong></td>
+                    <td><span class="role-badge ${getRoleBadgeClass(r.role_name)}">${escapeHtml(r.role_name)}</span></td>
+                    <td><strong>${escapeHtml(r.access_level)}</strong></td>
+                    <td>${escapeHtml(r.description)}</td>
+                </tr>
+            `).join('');
+
+            // 3. login_logs table
+            document.getElementById('logsCount').textContent = appDB.login_logs.length;
+            const logsTbody = document.getElementById('logsTableBody');
+            logsTbody.innerHTML = appDB.login_logs.map(l => `
+                <tr>
+                    <td>#${l.id}</td>
+                    <td><code>${escapeHtml(l.username)}</code></td>
+                    <td>${escapeHtml(l.timestamp)}</td>
+                    <td>
+                        <span class="status-badge ${l.status === 'SUCCESS' ? 'success' : 'failure'}">
+                            ${l.status === 'SUCCESS' ? '&#10004; MATCH' : '&#10008; MISMATCH'}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Add New User Modal Controls
+        function openAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'flex';
+            document.getElementById('newFullName').focus();
+        }
+
+        function closeAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'none';
+            document.getElementById('addUserForm').reset();
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'addUserModal') closeAddUserModal();
+        }
+
+        function handleAddNewUser(event) {
+            event.preventDefault();
+            const fullName = document.getElementById('newFullName').value.trim();
+            const username = document.getElementById('newUsername').value.trim().toLowerCase();
+            const password = document.getElementById('newPassword').value.trim();
+            const email = document.getElementById('newEmail').value.trim();
+            const roleId = parseInt(document.getElementById('newRoleId').value, 10);
+
+            if (!fullName || !username || !password) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            // Check if username already exists in 'users' table
+            if (appDB.users.some(u => u.username.toLowerCase() === username)) {
+                alert(`The username "${username}" already exists in the database. Please pick a unique username.`);
+                return;
+            }
+
+            const nextId = (appDB.users.length > 0 ? Math.max(...appDB.users.map(u => u.id)) : 0) + 1;
+            const newUser = {
+                id: nextId,
+                username: username,
+                password: password,
+                full_name: fullName,
+                role_id: roleId,
+                email: email
+            };
+
+            appDB.users.push(newUser);
+            saveDatabase();
+            closeAddUserModal();
+
+            // Autofill the login form with new credentials and notify
+            switchMainTab('auth');
+            returnToLogin();
+            quickFill(username, password);
+            alert(`User "${username}" has been successfully added to the database!\nCredentials have been auto-filled. Click "Submit & Validate" to test.`);
+        }
+
+        // Helper: badge styling
+        function getRoleBadgeClass(roleName) {
+            const r = (roleName || '').toLowerCase();
+            if (r.includes('admin')) return 'role-admin';
+            if (r.includes('faculty')) return 'role-faculty';
+            return 'role-student';
+        }
+
+        function getRoleIdBadgeClass(roleId) {
+            if (roleId === 1) return 'role-admin';
+            if (roleId === 2) return 'role-faculty';
+            return 'role-student';
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Start database on load
+        window.addEventListener('DOMContentLoaded', initDatabase);
+    </script>
+
+</body>
+</html>
